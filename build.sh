@@ -198,7 +198,7 @@ fi
 # -- custom packaging end
 
 if [ "${doArchive}" = "1" ] ; then
-    if [ ! -d ${jarsdir} ] ; then mkdir ${jarsdir} ; fi
+    if [ ! -d ${jarsdir} ] ; then mkdir ${here}/${jarsdir} ; fi
     mv ${here}/${serverjarfile}  ${here}/${jarsdir}
     mv ${here}/${clientjarfile}  ${here}/${jarsdir}
     mv ${here}/${jarfile}  ${here}/${jarsdir}

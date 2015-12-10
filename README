@@ -67,3 +67,7 @@ Call as: java -cp tc.jar tc.Hub     -> Server mode
 How to build it:
 ----------------
 There is a really small build script (works with the Bash shell in *nix and Cygwin under Windows). The final jar files are copied into the "jars" directory.
+
+Why is it called TapirChat?
+---------------------------
+Because tapirs are nice creatures and the tray icon is a little tapir (kudos to www.tapirsoft.de who have given public permission to use their logo).
