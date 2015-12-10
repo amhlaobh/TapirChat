@@ -1,0 +1,69 @@
+What is this?
+-------------
+It's a really small but useful chat app for a not more than a handful of users (because there are no rooms).
+The focus lies on smallness and network recovery, i.e. if the network is interrupted, there should be no "lost" messages but they should be sent/received when the network is available again. Also messages are by default encrypted (with a predefined key, which should really be changed when running the clients).
+Old messages (how far the history goes back can be changed) are sent to newly connected clients, so even if they arrive late in a conversation, they still get to see how it developed.
+Note that clients and server exchange version information in the initial handshake, so they have to match.
+
+How to change the secret key?
+-----------------------------
+It's a command line option that must be supplied for both server and clients, in a comma separated format, e.g.:
+-k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+
+So a complete start command looks like:
+java -jar tc-20151210-server.jar -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+And a couple of client:
+java -jar tc-20151210-client.jar -u Alice -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+java -jar tc-20151210-client.jar -u Bob -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+
+How does it work?
+-----------------
+The clients regularly poll the server for new messages and apart from that send heartbeats to signify that they are still running. The messages are then shown in the graphical user interface and a popup is shown in the notification tray (e.g. in Windows). Clicking on the little tapir icon in the tray will bring the conversation window to the front.
+
+What is needed:
+---------------
+- A publicly (or at least on the local network if all clients are local) available computer to run the server in.
+- The Java Runtime Environment version 1.6 or later on server and client machines.
+
+How to run it:
+--------------
+
+Easiest way to run the server:
+java -jar tc-20151210-server.jar
+
+Easiest way to run the client:
+java -jar tc-20151210-client.jar -u <username> 
+
+To print all available options:
+java -jar tc-20151210-client.jar  -help
+or
+java -jar tc-20151210-server.jar  -help
+
+Available options:
+  -help this message
+  -g <log file>   (should be first command line option; '-' for stdout (default))
+  -j <journal file>   (only for Hub; logs all user messages)
+  -l [FINEST|FINER|FINE|INFO|WARNING|SEVERE]  -> log level, should be first or second option
+  -h <server host>    (only for TextUI or SwingUI)
+  -p <server port, default 64321
+  -u <user name>      (only for TextUI or SwingUI)
+  -r <local port>     (only for TextUI or SwingUI)
+  -c | -noc   -> use|disable encryption
+  -pc | -nopc -> use|disable payload encryption
+  -nopo       -> disable popup balloons
+  -i <ip address[,ip address]>  -> allowed ip addresses
+  -a <minutes>   -> how many minutes' worth of archive to request (default 30)
+  -b <seconds>   -> heartbeat interval (default 30 seconds)
+  -k <secret key>  -> 16 bytes in the format -33,-59,-1,106,... ; values: -128 .. 127
+  -fs <font size>  -> font size, can be float; default: 11.0; must come before -fo
+  -fo <font>       -> font; must be full name; list all fonts with -l FINEST -fo x
+Call as: java -cp tc.jar tc.Hub     -> Server mode
+         java -cp tc.jar tc.TextUI  -> text interface
+         java -cp tc.jar tc.SwingUI -> graphical interface
+         java -jar tc.jar           -> same as tc.Hub
+         java -Djava.awt.headless=true  -> if no System Tray notification wished
+         java -cp tc.jar tc.Hub -i 192.168,10.,172.16.  -> only accept local ip addresses
+
+How to build it:
+----------------
+There is a really small build script (works with the Bash shell in *nix and Cygwin under Windows). The final jar files are copied into the "jars" directory.
