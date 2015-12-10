@@ -1,0 +1,133 @@
+2012-08-07
+	main(): grauer Hintergrund, wenn Server nicht erreichbar. Grund: connect()
+	war innerhalb invokeLater().
+	Loesung: SwingUI-initialisierung in Event Handling Thread, conneect()
+	ausserhalb nach invokeAndWait()
+
+2012-08-01
+	run setServerNotResponding on Event Dispatch Thread
+	
+2012-07-30
+	invoke conversationDoc changes on Event Dispatch Thread
+	invoke new SwingUI on Event Dispatch Thread
+
+2012-07-25
+	Mehr logging in setServerNotResponding
+
+2012-02-27
+	Fonts: print default font name (-l CONFIG)
+
+2011-08-23
+	List all fonts with -l FINEST -fo x
+	New option "-fs" for font size
+	Potential NPE in UserInputThread after getUserInput(): now remove invalid
+	chars *after* testing for null
+
+2011-08-22
+	Fix TextUI: filter out NULL und "|" (Message.FS) direkt in
+	UserInputThread.
+
+2011-08-09
+	notificationField read-only
+
+2011-08-08
+	Versionsnummer zurueck auf tc0.3 (keine Protokollaenderung fuer Hub
+		noetig)
+	gesendete/empfangene Anzahl bytes ausgeben mit -l FINEST
+	disable tray with -nopop
+	usage Hilfe mit "-help"
+	SECRET_DATA: "DATA" gibt sent/received aus in log file/Konsole
+
+2011-08-05
+	Nachricht verschlüsseln (aber nicht id/timestamp etc) mit ObjectCrypter;
+	New version tc0.4
+
+2011-07-12
+	Fix bug: Hub bricht ab bei unbekanntem Message_type (enum parse error)
+	Fix findbugs: Hub,SwingUI,Logger - DateFormat as ThreadLocal (Df. is not thread safe)
+	Fix Options: more error message if argument missing or unknown argument;
+		let caller decide what to do on Options.unknownOptionFound==true
+	Fix TextUI: ignore message queue full
+	WHO status leeren, wenn offline
+	status bar: "Offline seit ..."
+
+
+2011-07-08
+	WHO ausgegraut dargestellt in SwingUI.writeConversationMessage()
+
+2011-07-01
+	WHO direkt nach Programmstart (1 Sek. delay statt acktime/2)
+
+2011-06-30
+	Notification pane at top to show who is online (regularly updated with
+	same interval as ACK)
+
+2011-03-22
+	Options: use CONFIG log level to echo settings
+
+2011-03-18
+	TextUI: changed system.exit calls to "continue" in connect()
+
+2011-03-16
+	TextUI: sleep for heartbeatInterval on connect exception instead of
+	hard wired 30 secs
+
+2011-03-11
+	Tray: set offline after creating
+	Logger: flush after printing "log file opened" line
+
+2011-03-10
+	Hub/Options: implement journal file which captures every user message
+		also for reading in on startup
+	Logger: fix dolog(Level,String,Exception)
+	Message types as Enum
+	Allow log level to be adjusted after starting with "secret" "LOG" command
+
+2011-03-09
+	TextUI: fixed bug, compare MSG_TYPE_HEARTBEAT with msgBody instead of
+		msgType when inserting into sentMessageIds
+	TextUI: sentMessageIds, receivedMessageIds as LRU caches (potential memory
+		leak)
+	INFO: encryption may have a memory leak
+
+2011-03-08
+	Hub,Options: moved default PORT to Options
+	TextUI: removed reference to Hub.PORT
+	TextUI: sentMessageIds: only include non-heartbeat ids
+	TextUI: only change tray status if there actually was a change in
+		serverNotResponding (probably memory leak in Tray.setImageIcon)
+
+2011-03-07
+	Hub: VERSION to 0.3
+	Options: heartbeatInterval (-b)
+	Client/TextUI: support heartbeat interval message in handshake
+
+2011-03-01
+	Message: Use java.lang.UUID to create message IDs
+	Hub: VERSION upped to 0.2
+	Fix NumberFormatException if Message from structuredString has timestamp
+	in non-Long format
+
+2011-02-28
+	Client:288 don't repeat message id on returning WHOSONLINE, otherwise
+	TextUI thinks it's an ACK message
+
+2011-02-24
+	Reset tray item on clicking into conversation or input area
+
+2011-02-18
+	Bugfixes (findbugs)
+	Start UserInputThread from connect(), not constructor
+
+2011-02-16
+	Type safe Options.
+	User-definable encryption keys "-k" option
+	Bug: -Djava.awt.headless=true caused NullPointerException in
+		Tray.setOnline()/setOffline()
+
+2011-02-15
+	Fix Logger: date field size 18 instead of 16
+
+2011-02-14
+	TextUI: setServerNotResponding(false) in connect after handshake complete
+	Hub, SwingUI, Client, Message: preparations for ISTYPING messages

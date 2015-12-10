@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Created-By: 10.0-b23 (Sun Microsystems Inc.)
+Main-Class: tc.SwingUI
+Built-By: ok
+Class-Path: .
+
+

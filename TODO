@@ -1,0 +1,33 @@
+- Android client: persistent tcp/ip http://tokudu.com/2010/how-to-implement-push-notifications-for-android/
+    Alternative: user connection gets token and does frequent pulls with this token without need for login
+- Android client: TextUI should become service and inform TapirUI via intent of new messages
+
+- Wenn Nachricht eintrifft muss auf "Online" geschaltet werden (17.02.2012)
+- ACK für gesendete Nachricht soll Nachrichtentext-Stil verändern, um zu zeigen, daß sie wirklich beim Server eingegangen ist
+- Modus für regelmäßige Neuverbindung, damit keine Dauerverbindung existiert (z.B. Verbindungsende nach 30 Sekunden ohne Datentransfer)
+- heartbeat zurücksetzen bei jeder eingehenden Nachricht
+- serverOffline, wenn keine Antwort nach 5 Sekunden (oder so)
+- Nachricht verschlüsseln : user defined key/initialization vector
+- "drafts"-Datei für ungesendete Nachrichten (weil server down)
+- so wenig System.exit() Aufrufe wie noetig
+- WHO abfragen nach jeder Nachricht?
+- Messageliste aufgrund Zeitstempel ordnen, benötigt rewrite des Nachrichtenbereichs (29.6.2011)
+- "gelesen" status übertragen (durch klicken in Eingabebereich oder tray icon); ebenfalls rewrite des Nachrichtenbereichs
+- findbugs
+- Tray: use SWT tray additionally, Java Tray as fallback
+- istyping status messages
+- log messages: check for logenabled(level) first
+  trotzdem den Wert von Kommandozeile nehmen
+- status bar: "online since ..."
+- "Message queue full ..." -> Level.WARNING?
+
+Done:
+x Liste mit online-users
+x WHO delay nach start 2 Sek. fix statt heartbeattime/2 (1.7.2011)
+x "Adding user input ..." messageQueue.offer() nicht auf false getestet (12.7.2011)
+x Testen: ungueltige MESSAGE_TYPEs an Hub senden 12.7.2011
+x WHO status leeren, wenn offline 12.7.2011
+x status bar: "offline since ..."
+x [20110805] Nachricht verschlüsseln (aber nicht id/timestamp etc) mit ObjectCrypter;
+  ausschließen: heartbeat msg, archive/latest msg., handshake, ACK msg.
+x Netzwerk-Traffic protokollieren (payload)
