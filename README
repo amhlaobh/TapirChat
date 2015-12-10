@@ -2,31 +2,41 @@ What is this?
 -------------
 It's a really small but useful chat app for a not more than a handful of users (because there are no rooms).
 The focus lies on smallness and network recovery, i.e. if the network is interrupted, there should be no "lost" messages but they should be sent/received when the network is available again. Also messages are by default encrypted (with a predefined key, which should really be changed when running the clients).
+
 Old messages (how far the history goes back can be changed) are sent to newly connected clients, so even if they arrive late in a conversation, they still get to see how it developed.
+
 Note that clients and server exchange version information in the initial handshake, so they have to match.
 
-How to change the secret key?
------------------------------
-It's a command line option that must be supplied for both server and clients, in a comma separated format, e.g.:
--k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
-
-So a complete start command looks like:
-java -jar tc-20151210-server.jar -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
-And a couple of client:
-java -jar tc-20151210-client.jar -u Alice -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
-java -jar tc-20151210-client.jar -u Bob -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+The whole system consists of a server process on one computer and each user running a client process on their machine. The clients can be graphical user interfaces or text/console based.
 
 How does it work?
 -----------------
 The clients regularly poll the server for new messages and apart from that send heartbeats to signify that they are still running. The messages are then shown in the graphical user interface and a popup is shown in the notification tray (e.g. in Windows). Clicking on the little tapir icon in the tray will bring the conversation window to the front.
+The conversation window's upper text field shows (in faded colours for unobtrusiveness) who is currently online.
+Whenever the text input field (bottom field in conversation window) is green, the client is online (i.e. it's connected to the server and both know of each other). When it's grey, the network is interrupted or the server is down.
 
-What is needed:
----------------
+How does the client program work?
+---------------------------------
+The GUI (graphical user interface) is divided into three areas:
+- the top field, which contains a list of users that are online just now (as the server sees them)
+- the main field in the middle, which contains the list of messages that the client received
+- the bottom field (green or gray, according to online status), into which messages can be written to be sent to all other users
+
+A notification tray popup is shown each time a new message comes in (this behaviour can be turned off by a command line option).
+Clicking on the tray icon or popup will bring the converation window to the top.
+
+How to write a message:
+-----------------------
+Write some text into the green (or gray, if offline).
+
+What is needed to run this:
+---------------------------
 - A publicly (or at least on the local network if all clients are local) available computer to run the server in.
 - The Java Runtime Environment version 1.6 or later on server and client machines.
 
 How to run it:
 --------------
+(N.B.: change the name of the jar file according to the file downloaded or built)
 
 Easiest way to run the server:
 java -jar tc-20151210-server.jar
@@ -63,6 +73,20 @@ Call as: java -cp tc.jar tc.Hub     -> Server mode
          java -jar tc.jar           -> same as tc.Hub
          java -Djava.awt.headless=true  -> if no System Tray notification wished
          java -cp tc.jar tc.Hub -i 192.168,10.,172.16.  -> only accept local ip addresses
+         java -jar tc-20151210-client.jar -u user2 -fs 16 -fo Calibri -> Use "Calibri" font in size 16
+
+
+How to change the secret key?
+-----------------------------
+It's a command line option that must be supplied for both server and clients, in a comma separated format, e.g.:
+-k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+
+So a complete start command looks like:
+java -jar tc-20151210-server.jar -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+And a couple of client:
+java -jar tc-20151210-client.jar -u Alice -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+java -jar tc-20151210-client.jar -u Bob -k "1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6"
+
 
 How to build it:
 ----------------
@@ -71,3 +95,11 @@ There is a really small build script (works with the Bash shell in *nix and Cygw
 Why is it called TapirChat?
 ---------------------------
 Because tapirs are nice creatures and the tray icon is a little tapir (kudos to www.tapirsoft.de who have given public permission to use their logo).
+
+"Secret" commands:
+------------------
+A few special words written into the text input field will be interpreted by the client as special commands:
+"WHO" - update the topmost text field with who else is online
+"LOG FINEST" - sets the log level to "finest"; other values are: "FINER", "FINE", "CONFIG", "INFO", "WARNING", "SEVERE"
+"STATS" - prints number of sent/received messages (includes heartbeat messages) and amount of data transferred to the console window.
+
